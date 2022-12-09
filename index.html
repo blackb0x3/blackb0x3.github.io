@@ -1,1 +1,36 @@
-Hello, world!
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        height: 100%;
+        background: gray;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #svgContent {
+        width: auto;
+        height: auto;
+      }
+    </style>
+    <script>
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      });
+
+      window.onload = function() {
+        let base64SvgContent = params.base64SvgContent
+          .replaceAll('-', '+')
+          .replaceAll('_', '/');
+        let svgParser = new DOMParser();
+        let parsedContent = atob(base64SvgContent);
+        let svgDocument = svgParser.parseFromString(parsedContent, "image/svg+xml");
+        document.getElementById("svgContent").appendChild(svgDocument.documentElement);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="svgContent"></div>
+  </body>
+</html>
