@@ -23,6 +23,10 @@
         let base64SvgContent = params.base64SvgContent
           .replaceAll('-', '+')
           .replaceAll('_', '/');
+        switch (base64SvgContent.length % 4) {
+          case 2: base64SvgContent += "=="; break;
+          case 3: base64SvgContent += "=";  break;
+        }
         let svgParser = new DOMParser();
         let parsedContent = atob(base64SvgContent);
         let svgDocument = svgParser.parseFromString(parsedContent, "image/svg+xml");
